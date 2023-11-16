@@ -6,6 +6,10 @@ module DIYGit
     module Commands
       extend Dry::CLI::Registry
 
+      # ../diy-git/bin/toy-git ls-files | head -n 10
+      # ../diy-git/bin/toy-git ls-files --stage | head -n 10
+      # ../diy-git/bin/toy-git ls-files --stage --abbrev=7 | head -n 10
+      # ../diy-git/bin/toy-git ls-files --format='hello world %(objecttype) %(path)' | head -n 10
       class LsFiles < Dry::CLI::Command
         desc 'git-ls-files - Show information about files in the index and the working tree'
 

@@ -21,12 +21,17 @@ module DIYGit
       end
 
       class Pattern
+        # NOTE: don't support the following placeholders:
+        # - objectsize[:padded]
+        # - eolinfo:index
+        # - eolinfo:worktree
+        # - eolattr
         PLACEHOLDERS = %i(objectmode objecttype objectname objectsize stage path)
 
         def initialize(pattern)
           @pattern = pattern
 
-          # NOTE: Actual error message contains also invail fragment of a format string.
+          # NOTE: Actual error message contains also invalid fragment of a format string.
           #       Skip it for simplicity.
           if @pattern =~ /%(?!\((#{ PLACEHOLDERS.join('|') })\))/ # '%' + not '(' any placeholder ')'
               puts "fatal: bad ls-files format #{@pattern}"
