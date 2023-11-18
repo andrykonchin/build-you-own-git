@@ -170,8 +170,9 @@ module DIYGit
          @flags & 0xFFF # 12 bits
       end
 
+      # everything except pathname size bits
       def value
-        @flags
+        @flags & 0xF000
       end
     end
 
