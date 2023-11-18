@@ -76,11 +76,12 @@ module DIYGit
         #puts "=== #{i}"
         #i += 1
 
-        #signature = BinaryString.new(4)
-        #size = Int32.new
+        #signature = Stream::BinaryString.new(4)
+        #size = Stream::Int32.new
         #stream >> signature >> size
 
         #p [signature.value, size.value]
+        #p f.read(size.value)
 
         #if signature.value == "TREE"
           #left_to_read = size.value
@@ -114,7 +115,7 @@ module DIYGit
         #end
       #end
 
-      #checksum = BinaryString.new(20)
+      #checksum = Stream::BinaryString.new(20)
       #stream >> checksum
       #puts "Checksum"
       #p checksum.value.bytes.map { |b| b.to_s(16) }.join

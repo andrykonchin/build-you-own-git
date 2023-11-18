@@ -17,6 +17,8 @@ module DIYGit
         option :stage, type: :boolean, default: false, desc: 'Show staged contents\' mode bits, object name and stage number in the output.'
         option :abbrev, type: :integer, desc: 'Instead of showing the full 40-byte hexadecimal object lines, show the shortest prefix that is at least <n> hexdigits long that uniquely refers the object. Non default number of digits can be specified with --abbrev=<n>.'
         option :format, type: :string, desc: 'A string that interpolates %(fieldname) from the result being shown. It also interpolates %% to %, and %xx where xx are hex digits interpolates to character with hex code xx; for example %00 interpolates to \0 (NUL), %09 to \t (TAB) and %0a to \n (LF). --format cannot be combined with -s, -o, -k, -t, --resolve-undo and --eol.'
+        option :deleted, type: :boolean, desc: 'Show files with an unstaged deletion.'
+        option :modified, type: :boolean, desc: 'Show files with an unstaged modification (note that an unstaged deletion also counts as an unstaged modification)'
 
         def call(**options)
           if options[:format]
@@ -33,3 +35,12 @@ module DIYGit
     end
   end
 end
+
+# TODO:
+# - https://git-scm.com/docs/git-hash-object
+# - https://github.com/git/git/blob/cfb8a6e9a93adbe81efca66e6110c9b4d2e57169/Documentation/git-cat-file.txt#L292
+# - https://www.thegeekdiary.com/git-ls-tree-command-examples/
+# - https://git-scm.com/docs/git-write-tree
+# - https://git-scm.com/docs/git-commit-tree
+# - enable file monitor extension
+#   - https://github.blog/2022-06-29-improve-git-monorepo-performance-with-a-file-system-monitor/
