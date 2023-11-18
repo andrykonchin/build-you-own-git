@@ -7,7 +7,7 @@ module DIYGit
   # - https://github.com/git/git/blob/master/Documentation/gitformat-index.txt
   # - https://git-scm.com/docs/git-ls-files
   module LsFiles
-    class Cached
+    class Deleted
       def run(options)
         workdir = Dir.pwd
         index = DIYGit::Index.new(workdir)
@@ -18,6 +18,10 @@ module DIYGit
         end
 
         index.entries.each do |entry|
+          # NOTE: git uses `lstat` syscall and checks whether it fails
+          #       and error is either ENOENT or ENOTDIR
+          next if File.exist?(entry.pathname)
+
           if pattern
             puts pattern.apply_to(entry)
           else

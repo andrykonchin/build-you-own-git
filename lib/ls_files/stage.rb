@@ -15,7 +15,7 @@ module DIYGit
           abbrev = Integer(options[:abbrev])
 
           if abbrev <= 0
-            # NOTE: actually git's behavior:
+            # TODO: actually git's behavior:
             #  - 0 - means full length (20 characters), but
             #  - negative - by some reason prints only 4 characters
             abbrev = nil
