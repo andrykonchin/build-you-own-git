@@ -23,6 +23,10 @@ module DIYGit
           else
             puts entry.pathname
           end
+
+          if options[:debug]
+            puts CacheEntryDebugInfo.new(entry).report
+          end
         end
       end
     end

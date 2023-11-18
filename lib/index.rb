@@ -169,6 +169,10 @@ module DIYGit
       def pathname_size
          @flags & 0xFFF # 12 bits
       end
+
+      def value
+        @flags
+      end
     end
 
     class Mode

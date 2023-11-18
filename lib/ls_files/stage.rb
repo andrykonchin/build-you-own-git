@@ -1,4 +1,5 @@
 require_relative '../index'
+require_relative '../cache_entry_debug_info'
 
 module DIYGit
   # Resources
@@ -26,6 +27,10 @@ module DIYGit
           object_name = options[:abbrev] ? entry.object_name.hex[0, abbrev] : entry.object_name.hex
           line = "%s %s %s\t%s" % [entry.mode.value.to_s(8), object_name, entry.flags.stage_number, entry.pathname]
           puts line
+
+          if options[:debug]
+            puts CacheEntryDebugInfo.new(entry).report
+          end
         end
       end
     end
