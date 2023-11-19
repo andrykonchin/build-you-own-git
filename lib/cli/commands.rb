@@ -1,5 +1,6 @@
 require 'dry/cli'
 require_relative '../ls_files'
+require_relative '../hash_object'
 
 module DIYGit
   module CLI
@@ -26,6 +27,13 @@ module DIYGit
         def call(**options)
           # TODO: handle combinations on --modified/--deleted/--stage etc - file name are merged somehow
           # TODO: handle running in a subdirectory
+          # TODO: use Index Entry Offset Table to load entries in parallel
+          #
+          # NOTE: doesn't support:
+          # - a sparse index
+          # - links and git links
+          # - git filters
+          # - configuration
           if options[:stage]
             DIYGit::LsFiles::Stage.new.run(options)
           elsif options[:cached]
@@ -42,7 +50,20 @@ module DIYGit
         end
       end
 
+      class HashObject < Dry::CLI::Command
+        # TODO: add long description, not only NAME
+        desc 'git-hash-object - Compute object ID and optionally create an object from a file'
+
+        option :t, type: :string, desc: 'Specify the type of object to be created (default: "blob"). Possible values are commit, tree, blob, and tag'
+        option :stdin, type: :boolean, desc: 'Read the object from standard input instead of from a file.'
+
+        def call(**options)
+          DIYGit::HashObject.new.run(options)
+        end
+      end
+
       register 'ls-files', LsFiles
+      register 'hash-object', HashObject
     end
   end
 end

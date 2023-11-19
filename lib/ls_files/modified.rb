@@ -81,6 +81,7 @@ module DIYGit
 
           # NOTE: Git reads at once only files up to 32 KB.
           #       Larger files are handled with mmap syscall.
+          #       There is special case for huge files bigger than 512 MB.
           file_content = File.read(entry.pathname, encoding: "ASCII-8BIT")
 
           string_to_hash = "%s %d\0%s" % [type, file_size, file_content]
