@@ -56,6 +56,7 @@ module DIYGit
 
         option :t, type: :string, desc: 'Specify the type of object to be created (default: "blob"). Possible values are commit, tree, blob, and tag'
         option :stdin, type: :boolean, desc: 'Read the object from standard input instead of from a file.'
+        option :w, type: :boolean, desc: 'Actually write the object into the object database.'
 
         def call(**options)
           DIYGit::HashObject.new.run(options)
@@ -69,10 +70,16 @@ module DIYGit
 end
 
 # TODO:
+#
+# https://git-scm.com/docs/git
+#
 # - https://git-scm.com/docs/git-hash-object
 # - https://github.com/git/git/blob/cfb8a6e9a93adbe81efca66e6110c9b4d2e57169/Documentation/git-cat-file.txt#L292
 # - https://www.thegeekdiary.com/git-ls-tree-command-examples/
+# - https://git-scm.com/docs/git-read-tree
 # - https://git-scm.com/docs/git-write-tree
 # - https://git-scm.com/docs/git-commit-tree
+# - https://git-scm.com/docs/git-update-index
+#
 # - enable file monitor extension
 #   - https://github.blog/2022-06-29-improve-git-monorepo-performance-with-a-file-system-monitor/
