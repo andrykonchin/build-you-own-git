@@ -1,6 +1,7 @@
 require 'dry/cli'
 require_relative '../ls_files'
 require_relative '../hash_object'
+require_relative '../cat_file'
 
 module DIYGit
   module CLI
@@ -63,8 +64,19 @@ module DIYGit
         end
       end
 
+      class CatFile < Dry::CLI::Command
+        desc 'git-cat-file - Provide contents or details of repository objects'
+
+        option :s, type: :boolean, desc: 'Instead of the content, show the object size identified by <object>. If used with --use-mailmap option, will show the size of updated object after replacing idents using the mailmap mechanism.'
+
+        def call(**options)
+          DIYGit::CatFile.new.run(options)
+        end
+      end
+
       register 'ls-files', LsFiles
       register 'hash-object', HashObject
+      register 'cat-file', CatFile
     end
   end
 end
