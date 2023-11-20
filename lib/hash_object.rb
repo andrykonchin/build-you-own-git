@@ -12,22 +12,18 @@ module DIYGit
       type = options[:t] || "blob"
 
       if options[:stdin]
-        content = $stdin.read.b
-        size = content.size
-        digest = digest_for_object(type, size, content)
+        content = $stdin.read
 
         if options[:w]
-          write_object(digest, type, content)
+          write_object(type, content)
         end
 
-        puts digest
+        puts digest_for_object(type, content)
       end
 
       # [--] <file>...
       if options[:args]
-        args = options[:args] || []
-
-        args.each do |filename|
+        options[:args].each do |filename|
           unless File.exist?(filename)
             puts "fatal: could not open '#{filename}' for reading: No such file or directory"
             exit 1
@@ -36,30 +32,30 @@ module DIYGit
           # NOTE: Git reads at once only files up to 32 KB.
           #       Larger files are handled with mmap syscall.
           #       There is special case for huge files bigger than 512 MB.
-          content = File.read(filename, encoding: "ASCII-8BIT").b
-          size = content.size
-          digest = digest_for_object(type, size, content)
+          content = File.read(filename, encoding: "ASCII-8BIT")
 
           if options[:w]
-            write_object(digest, type, content)
+            write_object(type, content)
           end
 
-          puts digest
+          puts digest_for_object(type, content)
         end
       end
     end
 
     private
 
-    def digest_for_object(type, size, content)
-      string = "%s %d\0%s" % [type, size, content]
+    def digest_for_object(type, content)
+      string = "%s %d\0%s" % [type, content.bytesize, content]
       Digest::SHA1.hexdigest(string)
     end
 
-    def write_object(digest, type, content)
-      header = "%s %d\0" % [type, content.size]
+    def write_object(type, content)
+      header = "%s %d\0" % [type, content.bytesize]
       content_to_zip = header + content
       zipped_content = Zlib::Deflate.deflate(content_to_zip)
+
+      digest = digest_for_object(type, content)
 
       workdir = Dir.pwd
       path_to_dir = workdir + '/.git/objects/' + digest[0..1]
