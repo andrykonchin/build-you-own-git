@@ -2,6 +2,7 @@ require 'dry/cli'
 require_relative '../ls_files'
 require_relative '../hash_object'
 require_relative '../cat_file'
+require_relative '../mk_tag'
 
 module DIYGit
   module CLI
@@ -71,6 +72,12 @@ module DIYGit
 
         def call(**options)
           DIYGit::CatFile.new.run(options)
+        end
+      end
+
+      class MkTag < Dry::CLI::Command
+        def call(**options)
+          DIYGit.new.run(options)
         end
       end
 

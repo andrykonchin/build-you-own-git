@@ -1,6 +1,9 @@
 require "zlib"
 
 module DIYGit
+  # TODO: support other types than blob
+  # TODO: support commit-ish and tree-ish formats
+  # TODO: add proper validation
   class CatFile
     def run(options)
       if options[:args]
