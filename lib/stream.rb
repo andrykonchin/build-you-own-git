@@ -15,6 +15,8 @@ module DIYGit
 
         target.assign(bytes)
       elsif target.respond_to?(:terminator)
+        target.clean
+
         while (char = @io.getc) != target.terminator
           assert char != nil
 
@@ -82,7 +84,7 @@ module DIYGit
       end
 
       def hex
-        @value.bytes.map { |b| b.to_s(16) }.join
+        @value.bytes.map { |b| "%02x" % b }.join
       end
     end
 
@@ -96,6 +98,10 @@ module DIYGit
 
       def append(char)
         @value.concat(char)
+      end
+
+      def clean
+        @value = ""
       end
     end
   end

@@ -2,6 +2,7 @@ require "zlib"
 
 module DIYGit
   class MkTag
+    # TODO: not tested
     # TODO: validate format, example:
     #
     #   object 295d29dbe357d582f1d210c37fb11c02ec7b13ea

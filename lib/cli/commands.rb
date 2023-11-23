@@ -3,6 +3,7 @@ require_relative '../ls_files'
 require_relative '../hash_object'
 require_relative '../cat_file'
 require_relative '../mk_tag'
+require_relative '../ls_tree'
 
 module DIYGit
   module CLI
@@ -76,14 +77,28 @@ module DIYGit
       end
 
       class MkTag < Dry::CLI::Command
+        desc 'git-mktag - Creates a tag object with extra validation'
+
         def call(**options)
           DIYGit.new.run(options)
+        end
+      end
+
+      class LsTree < Dry::CLI::Command
+        desc 'git-ls-tree - List the contents of a tree object'
+
+        argument :treeish, required: true, desc: 'Id of a tree-ish'
+
+        def call(**options)
+          DIYGit::LsTree.new.run(options)
         end
       end
 
       register 'ls-files', LsFiles
       register 'hash-object', HashObject
       register 'cat-file', CatFile
+      register 'mktag', MkTag
+      register 'ls-tree', LsTree
     end
   end
 end
