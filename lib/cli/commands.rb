@@ -87,9 +87,41 @@ module DIYGit
       class LsTree < Dry::CLI::Command
         desc 'git-ls-tree - List the contents of a tree object'
 
+        option :"name-only", type: :boolean, aliases: ['name-status'], desc: 'List only filenames (instead of the "long" output), one per line. Cannot be combined with --object-only.'
+        option :"object-only", type: :boolean, desc: %q{List only names of the objects, one per line. Cannot be combined with --name-only or --name-status. This is equivalent to specifying --format='%(objectname)', but for both this option and that exact format the command takes a hand-optimized codepath instead of going through the generic formatting mechanism.}
+        option :abbrev, type: :integer, desc: 'Instead of showing the full 40-byte hexadecimal object lines, show the shortest prefix that is at least <n> hexdigits long that uniquely refers the object. Non default number of digits can be specified with --abbrev=<n>.'
+        option :long, type: :boolean, aliases: ['l'], desc: 'Show object size of blob (file) entries.'
+        option :r, type: :boolean, desc: 'Recurse into sub-trees.'
+        option :t, type: :boolean, desc: 'Show tree entries even when going to recurse them. Has no effect if -r was not passed. -d implies -t.'
+        option :d, type: :boolean, desc: 'Show only the named tree entry itself, not its children.'
+
         argument :treeish, required: true, desc: 'Id of a tree-ish'
 
         def call(**options)
+          # TODO: order of options in command affects order of names in error messages
+          if options[:"name-only"] && options[:"object-only"]
+            puts "error: option `name-only' is incompatible with --object-only"
+            exit 1
+          end
+
+          # TODO: order of options in command affects order of names in error messages
+          if options[:"name-status"] && options[:"object-only"]
+            puts "error: option `name-status' is incompatible with --object-only"
+            exit 1
+          end
+
+          # TODO: order of options in command affects order of names in error messages
+          if options[:long] && options[:"name-only"]
+            puts "error: option `name-only' is incompatible with --long"
+            exit 1
+          end
+
+          # TODO: order of options in command affects order of names in error messages
+          if options[:long] && options[:"object-only"]
+            puts "error: option `object-only' is incompatible with --long"
+            exit 1
+          end
+
           DIYGit::LsTree.new.run(options)
         end
       end
