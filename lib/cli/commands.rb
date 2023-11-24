@@ -4,6 +4,7 @@ require_relative '../hash_object'
 require_relative '../cat_file'
 require_relative '../mk_tag'
 require_relative '../ls_tree'
+require_relative '../checkout_index'
 
 module DIYGit
   module CLI
@@ -126,11 +127,28 @@ module DIYGit
         end
       end
 
+      class CheckoutIndex < Dry::CLI::Command
+        desc 'git-checkout-index - Copy files from the index to the working tree'
+
+        option :all, type: :boolean, desc: 'checks out all files in the index except for those with the skip-worktree bit set (see --ignore-skip-worktree-bits). Cannot be used together with explicit filenames.'
+        option :prefix, desc: 'When creating files, prepend <string> (usually a directory including a trailing /)'
+
+        def call(**options)
+          if options[:all] && options[:args]
+            puts "git checkout-index: don't mix '--all' and explicit filenames"
+            exit 1
+          end
+
+          DIYGit::CheckoutIndex.new.run(options)
+        end
+      end
+
       register 'ls-files', LsFiles
       register 'hash-object', HashObject
       register 'cat-file', CatFile
       register 'mktag', MkTag
       register 'ls-tree', LsTree
+      register 'checkout-index', CheckoutIndex
     end
   end
 end
@@ -149,3 +167,8 @@ end
 #
 # - enable file monitor extension
 #   - https://github.blog/2022-06-29-improve-git-monorepo-performance-with-a-file-system-monitor/
+#
+# - https://git-scm.com/docs/git-checkout-index
+# - https://git-scm.com/docs/git-mktree
+# - https://git-scm.com/docs/git-unpack-objects
+# - https://git-scm.com/docs/git-rev-list
